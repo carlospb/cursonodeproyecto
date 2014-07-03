@@ -1,3 +1,4 @@
+var config       = require('./oauth.js')
 var express      = require('express');
 var path         = require('path');
 var favicon      = require('static-favicon');
@@ -7,6 +8,9 @@ var bodyParser   = require('body-parser');
 
 var session      = require('cookie-session');
 //var tokens       = require('csrf-tokens')(options);
+
+var passport         = require('passport');
+var FacebookStrategy = require('passport-facebook').Strategy;
 
 var routes       = require('./routes/index');
 var users        = require('./routes/users');
@@ -29,15 +33,40 @@ app.use(session({
   httpOnly: true, // not available to client via JavaScript
 }));
 
+/*
+//
+// EJEMPLO: Uso de sesiones
+//
 app.use(function (req, res, next) {
   var n = req.session.views || 0
   req.session.views = ++n
   res.end(n + ' views')
 })
+*/
 
 app.use(cookieParser());
 app.use(require('stylus').middleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
+
+//
+//
+//
+
+
+// config
+passport.use(new FacebookStrategy({
+    clientID:     config.facebook.clientID,
+    clientSecret: config.facebook.clientSecret,
+    callbackURL:  config.facebook.callbackURL
+  },
+  function(accessToken, refreshToken, profile, done) {
+    process.nextTick(function () {
+      return done(null, profile);
+    });
+  }
+));
+
+
 
 app.use('/', routes);
 app.use('/users', users);

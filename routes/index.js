@@ -1,5 +1,6 @@
-var express = require('express');
-var router  = express.Router();
+var express  = require('express');
+var router   = express.Router();
+var passport = require('passport');
 
 //
 //  Este callback o middleware permite controlar si el usuario tiene una
@@ -21,52 +22,18 @@ router.get('/', function(req, res) {
   res.send('/ GET OK');
 });
 
-// POST request to the root URL
-router.post('/', function(req, res) {
-  res.send('/ POST OK');
-});
+// Redirect the user to Facebook for authentication.  When complete,
+// Facebook will redirect the user back to the application at
+//     /auth/facebook/callback
+router.get('/auth/facebook', passport.authenticate('facebook'));
 
-// PUT request to the root URL
-router.put('/', function(req, res) {
-  res.send('/ PUT OK');
-});
-
-// PATCH request to the root URL
-router.patch('/', function(req, res) {
-  res.send('/ PATCH OK');
-});
-
-// DELETE request to the root URL
-router.delete('/', function(req, res) {
-  res.send('/ DELETE OK');
-});
-
-// OPTIONS request to the root URL
-router.options('/', function(req, res) {
-  res.send('/ OPTIONS OK');
-});
-
-// M-SEARCH request to the root URL
-router['m-search']('/', function(req, res) {
-  res.send('/ M-SEARCH OK');
-});
-
-// NOTIFY request to the root URL
-router.notify('/', function(req, res) {
-  res.send('/ NOTIFY OK');
-});
-
-// SUBSCRIBE request to the root URL
-router.subscribe('/', function(req, res) {
-  res.send('/ SUBSCRIBE OK');
-});
-
-// UNSUBSCRIBE request to the root URL
-router.unsubscribe('/', function(req, res) {
-  res.send('/ UNSUBSCRIBE OK');
-});
-
-
+// Facebook will redirect the user to this URL after approval.  Finish the
+// authentication process by attempting to obtain an access token.  If
+// access was granted, the user will be logged in.  Otherwise,
+// authentication has failed.
+router.get('/auth/facebook/callback', 
+  passport.authenticate('facebook', { successRedirect: '/',
+                                      failureRedirect: '/login' }));
 
 
 module.exports = router;
