@@ -6,7 +6,7 @@ var router  = express.Router();
 //  cookie predeterminada para acceder al sitio.
 //  Si no la tiene sera redirigido a la ruta '/site-not-available'
 //
-
+/*
 var cookieAuthorizer = function(req, res, next) {
     if(typeof req.cookies.authorizeme == "undefined"){
         res.redirect('/site-not-available');         
@@ -14,7 +14,7 @@ var cookieAuthorizer = function(req, res, next) {
         next();
     }
 }
-
+*/
 
 // GET request to the root URL
 router.get('/', function(req, res) {
