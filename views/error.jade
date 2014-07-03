@@ -1,0 +1,8 @@
+extends layout
+
+block content
+  h1
+    i.fa.fa-bug.fa-4x
+    = message
+  h2= error.status
+  .alert.alert-danger(role="alert") #{error.stack}
